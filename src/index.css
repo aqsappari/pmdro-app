@@ -1,0 +1,69 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   DEFAULT THEME: Deep Purple / Obsidian Lavender
+   ========================================================================== */
+:root,
+.purple {
+  /* Fonts */
+  --font-header: "Comfortaa", sans-serif;
+  --font-body: "Quicksand", sans-serif;
+
+  /* Backgrounds */
+  --bg-primary: #0a0a0c; /* Ultra-dark obsidian black */
+  --bg-secondary: #141419; /* Soft charcoal for panels/cards */
+  --bg-tertiary: #1e1e24; /* For borders or active button states */
+
+  /* Accents */
+  --accent: #9d85bb; /* Muted, desaturated lavender */
+  --accent-glow: rgba(157, 133, 187, 0.15); /* Soft glow/hover effects */
+
+  /* Typography */
+  --text-primary: #f3f3f5; /* Soft off-white */
+  --text-secondary: #8e8e93; /* Muted gray */
+}
+
+/* ==========================================================================
+   ALTERNATIVE THEME: Ember Dark / Smoked Terracotta
+   ========================================================================== */
+.red {
+  /* Backgrounds */
+  --bg-primary: #0c0a0a; /* Deep warm black */
+  --bg-secondary: #161313; /* Soft warm charcoal */
+  --bg-tertiary: #221d1d; /* For borders/hover states */
+
+  /* Accents */
+  --accent: #c87a68; /* Smoked terracotta */
+  --accent-glow: rgba(200, 122, 104, 0.15);
+
+  /* Typography */
+  --text-primary: #f6f3f2; /* Slightly warm off-white */
+  --text-secondary: #928987; /* Warm muted gray */
+}
+
+/* ==========================================================================
+   TAILWIND V4 THEME CONFIGURATION
+   ========================================================================== */
+@theme {
+  /* Colors map directly to bg-*, text-*, border-* */
+  --color-background: var(--bg-primary);
+  --color-surface: var(--bg-secondary);
+  --color-border: var(--bg-tertiary);
+
+  --color-accent: var(--accent);
+  --color-accent-glow: var(--accent-glow);
+
+  --color-maintext: var(--text-primary);
+  --color-subtext: var(--text-secondary);
+
+  /* Tailwind v4 expects --font-*, not --font-family-* */
+  --font-header: var(--font-header);
+  --font-body: var(--font-body);
+}
+
+/* Base reset overrides (Tailwind Preflight handles most of this automatically) */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
