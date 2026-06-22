@@ -22,7 +22,7 @@ export function TodoItem({
           className={`aspect-square rounded-full ${complete ? "w-1.5 bg-subtext" : "w-2 bg-accent"} `}
         />
         <span
-          className={`capitalize ${complete ? "text-subtext line-through" : ""}`}
+          className={`capitalize select-text ${complete ? "text-subtext line-through" : ""}`}
         >
           {children}
         </span>

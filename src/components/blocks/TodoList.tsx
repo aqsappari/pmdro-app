@@ -1,37 +1,24 @@
 import { LuPlus } from "react-icons/lu";
 import { TodoItem } from "../ui/TodoItem";
-import { useState, useEffect } from "react";
-import { loadState, saveState } from "../../utils/storage";
+import { useState } from "react";
 
 interface TaskProps {
   id: number;
   text: string;
   completed: boolean;
+  completedAt?: number;
 }
 
-export function TodoList() {
-  const [tasks, setTasks] = useState<TaskProps[]>(() => {
-    try {
-      const state = loadState();
-      return (state?.tasks as TaskProps[]) ?? [];
-    } catch {
-      return [];
-    }
-  });
-  const [inputValue, setInputValue] = useState("");
+interface TodoListProps {
+  tasks: TaskProps[];
+  setTasks: React.Dispatch<React.SetStateAction<TaskProps[]>>;
+}
 
-  // Persist tasks whenever they change
-  useEffect(() => {
-    try {
-      saveState({ tasks });
-    } catch {
-      // ignore
-    }
-  }, [tasks]);
+export function TodoList({ tasks, setTasks }: TodoListProps) {
+  const [inputValue, setInputValue] = useState("");
 
   const handleAddTask = (e: React.FormEvent) => {
     e.preventDefault();
-
     if (!inputValue.trim()) return;
 
     const newTask: TaskProps = {
@@ -46,7 +33,17 @@ export function TodoList() {
 
   const toggleTask = (id: number) => {
     setTasks(
-      tasks.map((t) => (t.id == id ? { ...t, completed: !t.completed } : t)),
+      tasks.map((t) => {
+        if (t.id === id) {
+          const nextCompleted = !t.completed;
+          return {
+            ...t,
+            completed: nextCompleted,
+            completedAt: nextCompleted ? Date.now() : undefined,
+          };
+        }
+        return t;
+      }),
     );
   };
 
@@ -55,6 +52,19 @@ export function TodoList() {
   };
 
   const activeCount = tasks.filter((t) => !t.completed).length;
+
+  // ==========================================
+  // SORTING LOGIC
+  // ==========================================
+  const sortedTasks = [...tasks].sort((a, b) => {
+    if (a.completed !== b.completed) {
+      return a.completed ? 1 : -1;
+    }
+    if (!a.completed && !b.completed) {
+      return a.id - b.id;
+    }
+    return (a.completedAt || 0) - (b.completedAt || 0);
+  });
 
   return (
     <section className="h-full p-8 flex flex-col justify-center items-center xl:items-start gap-2">
@@ -82,7 +92,7 @@ export function TodoList() {
         </div>
       ) : (
         <ul className="grow xl:max-h-75 w-full pr-2 flex flex-col gap-4 overflow-y-auto custom-scroll">
-          {tasks.map((task) => (
+          {sortedTasks.map((task) => (
             <TodoItem
               key={task.id}
               complete={task.completed}

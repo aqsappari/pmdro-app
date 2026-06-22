@@ -1,6 +1,6 @@
 // SettingsModal.tsx
 import React, { useState, useEffect, useRef } from "react";
-import { LuRefreshCcw, LuTrash2, LuX } from "react-icons/lu";
+import { LuRefreshCcw, LuX } from "react-icons/lu";
 import { type TimerMode } from "../../App";
 import { ThemeSelector } from "./ThemeSelector";
 import { DurationPicker } from "./DurationPicker";
@@ -14,7 +14,6 @@ interface SettingsModalProps {
   onClose: (revertPreview?: boolean) => void;
   storageError?: string | null;
   onClearLocalData: () => void;
-  onResetDefaults: () => void;
 }
 
 // ==========================================
@@ -29,13 +28,12 @@ export function SettingsModal({
   onClose,
   storageError,
   onClearLocalData,
-  onResetDefaults,
 }: SettingsModalProps) {
   const [showConfirmClear, setShowConfirmClear] = useState(false);
   const [selectedSound, setSelectedSound] = useState("default");
   const [customSoundName, setCustomSoundName] = useState("No file selected");
 
-  // Parse durations into minutes and seconds
+  // Parse durations into minutes and seconds local state
   const [localFocusMin, setLocalFocusMin] = useState(
     Math.floor(durations.focus / 60),
   );
@@ -52,6 +50,32 @@ export function SettingsModal({
   const [localLongSec, setLocalLongSec] = useState(durations.long % 60);
 
   const [localTheme, setLocalTheme] = useState(theme);
+
+  // Sync picker inputs when parent data resets or updates.
+  // Run updates asynchronously to avoid cascading renders from sync setState in effects.
+  useEffect(() => {
+    const id = window.setTimeout(() => {
+      setLocalFocusMin(Math.floor(durations.focus / 60));
+      setLocalFocusSec(durations.focus % 60);
+
+      setLocalShortMin(Math.floor(durations.short / 60));
+      setLocalShortSec(durations.short % 60);
+
+      setLocalLongMin(Math.floor(durations.long / 60));
+      setLocalLongSec(durations.long % 60);
+    }, 0);
+
+    return () => window.clearTimeout(id);
+  }, [durations]);
+
+  // Sync theme selection panel if default resets parent theme configuration
+  useEffect(() => {
+    const id = window.setTimeout(() => {
+      setLocalTheme(theme);
+    }, 0);
+
+    return () => window.clearTimeout(id);
+  }, [theme]);
 
   // Browser Back / History Interception Logic
   const allowPopCloseRef = useRef(false);
@@ -122,7 +146,6 @@ export function SettingsModal({
         <SettingsHeader
           storageError={storageError}
           onOpenClearConfirm={() => setShowConfirmClear(true)}
-          onResetDefaults={onResetDefaults}
           onClose={() => onClose(true)}
         />
 
@@ -207,14 +230,12 @@ export function SettingsModal({
 interface SettingsHeaderProps {
   storageError?: string | null;
   onOpenClearConfirm: () => void;
-  onResetDefaults: () => void;
   onClose: () => void;
 }
 
 function SettingsHeader({
   storageError,
   onOpenClearConfirm,
-  onResetDefaults,
   onClose,
 }: SettingsHeaderProps) {
   return (
@@ -238,14 +259,6 @@ function SettingsHeader({
           type="button"
           onClick={onOpenClearConfirm}
           aria-label="Clear local data"
-          className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-accent/15 bg-surface/80 text-subtext transition hover:border-accent hover:text-maintext"
-        >
-          <LuTrash2 className="h-5 w-5" />
-        </button>
-        <button
-          type="button"
-          onClick={onResetDefaults}
-          aria-label="Reset defaults"
           className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-accent/15 bg-surface/80 text-subtext transition hover:border-accent hover:text-maintext"
         >
           <LuRefreshCcw className="h-5 w-5" />

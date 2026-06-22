@@ -10,6 +10,7 @@ export type PmdroState = {
     id: number;
     text: string;
     completed: boolean;
+    completedAt?: number; // Map field to match the component implementation
   }[];
 };
 
