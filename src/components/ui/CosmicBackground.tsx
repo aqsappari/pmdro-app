@@ -229,7 +229,7 @@ export function CosmicBackground() {
       const mouse = mouseRef.current;
 
       const time = Date.now() * 0.0001;
-      const globalSpin = time * 0.15;
+      const globalSpin = time * 0.3;
 
       const cosX = Math.cos(tiltX);
       const sinX = Math.sin(tiltX);

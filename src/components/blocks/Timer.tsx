@@ -155,8 +155,8 @@ export function Timer({ durations }: TimerProps) {
 
   const activeUnderlineStyles: Record<TimerMode, string> = {
     focus: "left-0 w-12 sm:w-14",
-    short: "left-[76px] sm:left-[92px] w-[110px] sm:w-[130px]",
-    long: "left-[214px] sm:left-[250px] w-[106px] sm:w-[124px]",
+    short: "left-[76px] sm:left-[92px] w-[60px] sm:w-[128px]",
+    long: "left-[158px] sm:left-[250px] w-[50px] sm:w-[118px]",
   };
 
   return (
