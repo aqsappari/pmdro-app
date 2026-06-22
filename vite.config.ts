@@ -24,7 +24,7 @@ export default defineConfig({
         "robots.txt",
       ],
       workbox: {
-        globPatterns: ["**/*.{js,css,html,png,svg,ico,txt,webmanifest}"],
+        globPatterns: ["**/*.{js,css,html,png,svg,ico,txt,webmanifest,mp3}"],
       },
     }),
   ],

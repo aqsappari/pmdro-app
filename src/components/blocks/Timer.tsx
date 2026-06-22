@@ -153,6 +153,15 @@ export function Timer({ durations }: TimerProps) {
     return () => window.removeEventListener("click", handleGlobalClick);
   }, [showAlarmToast, stopAlarm]);
 
+  useEffect(() => {
+    if (!isRunning) {
+      const timeoutId = window.setTimeout(() => {
+        setTimeLeft(durations[mode]);
+      });
+      return () => window.clearTimeout(timeoutId);
+    }
+  }, [durations, mode, isRunning]);
+
   const activeUnderlineStyles: Record<TimerMode, string> = {
     focus: "left-0 w-12 sm:w-14",
     short: "left-[76px] sm:left-[92px] w-[60px] sm:w-[128px]",
