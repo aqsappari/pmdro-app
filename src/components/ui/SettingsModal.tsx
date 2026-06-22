@@ -153,7 +153,7 @@ export function SettingsModal({
 
         {showConfirmClear && (
           <div className="absolute inset-0 z-40 flex items-center justify-center p-4">
-            <div className="w-full max-w-xl rounded-[1.5rem] border border-accent/20 bg-background/95 p-6 shadow-2xl backdrop-blur-xl">
+            <div className="w-full max-w-xl rounded-3xl border border-accent/20 bg-background/95 p-6 shadow-2xl backdrop-blur-xl">
               <p className="text-sm leading-7 text-subtext">
                 Are you sure you want to clear all local data? This cannot be
                 undone.
@@ -241,7 +241,7 @@ export function SettingsModal({
               </div>
             </div>
 
-            <div className="rounded-[2rem] border border-accent/15 bg-surface/90 p-6">
+            <div className="rounded-4xl border border-accent/15 bg-surface/90 p-6">
               <h3 className="text-xs font-bold uppercase tracking-[0.35em] text-subtext/60 mb-4">
                 Space Atmosphere
               </h3>
@@ -278,7 +278,7 @@ export function SettingsModal({
               </div>
             </div>
 
-            <div className="rounded-[2rem] border border-accent/15 bg-surface/90 p-6">
+            <div className="rounded-4xl border border-accent/15 bg-surface/90 p-6">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <h3 className="text-xs font-bold uppercase tracking-[0.35em] text-subtext/60">
