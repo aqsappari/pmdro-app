@@ -96,6 +96,31 @@
   --font-body: var(--font-body);
 }
 
+body {
+  @apply bg-background;
+}
+
 .active {
   @apply text-accent border-b-2 border-accent;
+}
+
+@keyframes bell-vibrate {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-2px);
+  }
+  75% {
+    transform: translateX(2px);
+  }
+}
+
+.animate-bell-vibrate {
+  animation: bell-vibrate 0.35s ease-in-out infinite;
+}
+
+.custom-scroll {
+  @apply [&::-webkit-scrollbar]:w-0.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-subtext [&::-webkit-scrollbar-thumb]:rounded;
 }

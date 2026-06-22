@@ -1,6 +1,7 @@
 import { LuPlus } from "react-icons/lu";
 import { TodoItem } from "../ui/TodoItem";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { loadState, saveState } from "../../utils/storage";
 
 interface TaskProps {
   id: number;
@@ -9,8 +10,24 @@ interface TaskProps {
 }
 
 export function TodoList() {
-  const [tasks, setTasks] = useState<TaskProps[]>([]);
+  const [tasks, setTasks] = useState<TaskProps[]>(() => {
+    try {
+      const state = loadState();
+      return (state?.tasks as TaskProps[]) ?? [];
+    } catch {
+      return [];
+    }
+  });
   const [inputValue, setInputValue] = useState("");
+
+  // Persist tasks whenever they change
+  useEffect(() => {
+    try {
+      saveState({ tasks });
+    } catch {
+      // ignore
+    }
+  }, [tasks]);
 
   const handleAddTask = (e: React.FormEvent) => {
     e.preventDefault();
@@ -64,7 +81,7 @@ export function TodoList() {
           Lanes are clear. State your target above.
         </div>
       ) : (
-        <ul className="grow max-h-75 w-full pr-2 flex flex-col gap-4 overflow-y-auto [&::-webkit-scrollbar]:w-0.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-subtext [&::-webkit-scrollbar-thumb]:rounded">
+        <ul className="grow xl:max-h-75 w-full pr-2 flex flex-col gap-4 overflow-y-auto custom-scroll">
           {tasks.map((task) => (
             <TodoItem
               key={task.id}
