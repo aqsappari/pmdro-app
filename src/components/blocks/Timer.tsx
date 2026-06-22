@@ -18,6 +18,17 @@ export function Timer({ durations }: TimerProps) {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
+  // Sync timeLeft dynamically ONLY when the timer is genuinely fresh, stable, and inactive
+  useEffect(() => {
+    if (isFresh && !isRunning && !hasFinished) {
+      const id = window.setTimeout(() => {
+        setTimeLeft(durations[mode]);
+      }, 0);
+
+      return () => window.clearTimeout(id);
+    }
+  }, [durations, mode, isFresh, isRunning, hasFinished]);
+
   const handleModeChange = (newMode: TimerMode) => {
     setIsRunning(false);
     setHasFinished(false);
@@ -30,7 +41,7 @@ export function Timer({ durations }: TimerProps) {
     setIsRunning(false);
     setHasFinished(false);
     setTimeLeft(durations[mode]);
-    setIsFresh(true);
+    setIsFresh(true); // Returns button label back to "Start"
   };
 
   const handleSkip = () => {
@@ -47,7 +58,7 @@ export function Timer({ durations }: TimerProps) {
     setIsRunning(false);
     setHasFinished(true);
     setShowAlarmToast(true);
-    setIsFresh(false);
+    setIsFresh(true); // Resets back to fresh for the next loop state
   };
 
   const stopAlarm = useCallback(() => {
@@ -68,14 +79,14 @@ export function Timer({ durations }: TimerProps) {
     setShowAlarmToast(false);
     setHasFinished(false);
     setTimeLeft(durations[mode]);
-    setIsFresh(true);
+    setIsFresh(true); // Returns button label safely back to "Start"
   }, [durations, mode]);
 
   const handleToggleRun = () => {
     if (hasFinished) return;
     setIsRunning((current) => {
       const next = !current;
-      if (next) setIsFresh(false);
+      if (next) setIsFresh(false); // No longer pristine base position once ticking begins
       return next;
     });
   };
@@ -88,12 +99,7 @@ export function Timer({ durations }: TimerProps) {
     return { minutes, seconds };
   };
 
-  const currentTimeLeft =
-    isFresh && !isRunning && !showAlarmToast && !hasFinished
-      ? durations[mode]
-      : timeLeft;
-
-  const { minutes, seconds } = formatTimeValues(currentTimeLeft);
+  const { minutes, seconds } = formatTimeValues(timeLeft);
 
   useEffect(() => {
     if (isRunning) {
@@ -123,7 +129,7 @@ export function Timer({ durations }: TimerProps) {
     audio.volume = 0;
     audio.loop = true;
     audio.play().catch(() => {
-      // autoplay can be blocked; user interaction may be required
+      // autoplay blocking fallback
     });
 
     const fadeInInterval = setInterval(() => {
@@ -141,7 +147,7 @@ export function Timer({ durations }: TimerProps) {
     };
   }, [showAlarmToast]);
 
-  // Allow clicking anywhere while alarm is active to stop the ringtone.
+  // Global click context listener to dismiss active alert ringer
   useEffect(() => {
     if (!showAlarmToast) return;
 
@@ -153,14 +159,12 @@ export function Timer({ durations }: TimerProps) {
     return () => window.removeEventListener("click", handleGlobalClick);
   }, [showAlarmToast, stopAlarm]);
 
-  useEffect(() => {
-    if (!isRunning) {
-      const timeoutId = window.setTimeout(() => {
-        setTimeLeft(durations[mode]);
-      });
-      return () => window.clearTimeout(timeoutId);
-    }
-  }, [durations, mode, isRunning]);
+  // Determine label dynamically using native conditions
+  const getActionButtonLabel = () => {
+    if (isRunning) return "Pause";
+    if (!isFresh) return "Play"; // It was modified but is paused right now
+    return "Start"; // Pristine start values
+  };
 
   const activeUnderlineStyles: Record<TimerMode, string> = {
     focus: "left-0 w-12 sm:w-14",
@@ -207,9 +211,7 @@ export function Timer({ durations }: TimerProps) {
         />
       </div>
 
-      {/* Unique Brutalist Focal Display */}
       <div className="relative flex items-center justify-center py-2 group">
-        {/* Soft immersive ambient backdrop glow that wakes up when running */}
         <div
           className={`absolute inset-0 rounded-full blur-3xl transition-all duration-1000 opacity-0 bg-accent/10 ${
             isRunning ? "opacity-100 scale-110" : ""
@@ -223,7 +225,9 @@ export function Timer({ durations }: TimerProps) {
         >
           {minutes}
           <span
-            className={`-translate-y-4 inline-block mx-8 animate-pulse ${isRunning ? "[animation-duration:1s]" : "[animation-duration:2s]"}`}
+            className={`-translate-y-4 inline-block mx-8 animate-pulse ${
+              isRunning ? "[animation-duration:1s]" : "[animation-duration:2s]"
+            }`}
           >
             :
           </span>
@@ -234,7 +238,6 @@ export function Timer({ durations }: TimerProps) {
       <audio ref={audioRef} src={alarmAudio} preload="auto" />
       {showAlarmToast && <AlarmToast onConfirm={stopAlarm} />}
 
-      {/* Command Control Links */}
       <div className="flex items-center gap-12 text-sm font-bold tracking-widest">
         <button
           onClick={handleReset}
@@ -247,7 +250,7 @@ export function Timer({ durations }: TimerProps) {
           onClick={handleToggleRun}
           className="uppercase text-accent hover:tracking-[0.2em] active:scale-90 transition-all duration-300 cursor-pointer shadow-[0_0_15px_rgba(0,0,0,0.2)]"
         >
-          {isRunning ? "Pause" : "Start"}
+          {getActionButtonLabel()}
         </button>
 
         <button
