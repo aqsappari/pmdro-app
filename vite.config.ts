@@ -13,6 +13,19 @@ export default defineConfig({
     VitePWA({
       registerType: "autoUpdate",
       manifest: false,
+      includeAssets: [
+        "favicon.ico",
+        "favicon-16x16.png",
+        "favicon-32x32.png",
+        "apple-touch-icon.png",
+        "android-chrome-192x192.png",
+        "android-chrome-512x512.png",
+        "site.webmanifest",
+        "robots.txt",
+      ],
+      workbox: {
+        globPatterns: ["**/*.{js,css,html,png,svg,ico,txt,webmanifest}"],
+      },
     }),
   ],
   server: {
