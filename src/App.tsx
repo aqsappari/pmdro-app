@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Analytics } from "@vercel/analytics/react";
 import { loadState, saveState, clearState } from "./utils/storage";
 import { Header } from "./components/blocks/Header";
 import { Timer } from "./components/blocks/Timer";
@@ -159,6 +160,7 @@ export default function App() {
         />
       )}
       <Toast message={toastMessage} onClose={() => setToastMessage(null)} />
+      <Analytics />
     </div>
   );
 }
