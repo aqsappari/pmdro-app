@@ -1,48 +1,87 @@
 @import "tailwindcss";
 
 /* ==========================================================================
-   DEFAULT THEME: Deep Purple / Obsidian Lavender
+   DEFAULT THEME: Obsidian Lavender
    ========================================================================== */
-:root,
-.purple {
-  /* Fonts */
+:root {
   --font-header: "Comfortaa", sans-serif;
   --font-body: "Quicksand", sans-serif;
 
-  /* Backgrounds */
-  --bg-primary: #0a0a0c; /* Ultra-dark obsidian black */
-  --bg-secondary: #141419; /* Soft charcoal for panels/cards */
-  --bg-tertiary: #1e1e24; /* For borders or active button states */
+  --bg-primary: #0a0a0c;
+  --bg-secondary: #141419;
+  --bg-tertiary: #1e1e24;
 
-  /* Accents */
-  --accent: #9d85bb; /* Muted, desaturated lavender */
-  --accent-glow: rgba(157, 133, 187, 0.15); /* Soft glow/hover effects */
+  --accent: #9d85bb;
+  --accent-glow: rgba(157, 133, 187, 0.15);
 
-  /* Typography */
-  --text-primary: #f3f3f5; /* Soft off-white */
-  --text-secondary: #8e8e93; /* Muted gray */
+  --text-primary: #f3f3f5;
+  --text-secondary: #8e8e93;
 }
 
 /* ==========================================================================
-   Ember Dark / Smoked Terracotta
+   EMERALD THEME: Jade Nebula
    ========================================================================== */
-.red {
-  /* Backgrounds */
-  --bg-primary: #0c0a0a; /* Deep warm black */
-  --bg-secondary: #161313; /* Soft warm charcoal */
-  --bg-tertiary: #221d1d; /* For borders/hover states */
+.theme-emerald {
+  --bg-primary: #060908;
+  --bg-secondary: #0f1412;
+  --bg-tertiary: #17201c;
 
-  /* Accents */
-  --accent: #c87a68; /* Smoked terracotta */
-  --accent-glow: rgba(200, 122, 104, 0.15);
+  --accent: #50bfa0;
+  --accent-glow: rgba(80, 191, 160, 0.15);
 
-  /* Typography */
-  --text-primary: #f6f3f2; /* Slightly warm off-white */
-  --text-secondary: #928987; /* Warm muted gray */
+  --text-primary: #f0f5f3;
+  --text-secondary: #82928c;
 }
 
+/* ==========================================================================
+   AMBER THEME: Solar Flare
+   ========================================================================== */
+.theme-amber {
+  --bg-primary: #0a0805;
+  --bg-secondary: #16120c;
+  --bg-tertiary: #221b12;
+
+  --accent: #dfa442;
+  --accent-glow: rgba(223, 164, 66, 0.15);
+
+  --text-primary: #f7f5f2;
+  --text-secondary: #968e83;
+}
+
+/* ==========================================================================
+   OCEAN THEME: Astro Ocean
+   ========================================================================== */
+.theme-ocean {
+  --bg-primary: #05080c; /* Deep oceanic trench */
+  --bg-secondary: #0c121a; /* Abyssal blue charcoal */
+  --bg-tertiary: #141c28;
+
+  --accent: #3a9fd4; /* Vibrant electric cyan-blue */
+  --accent-glow: rgba(58, 159, 212, 0.15);
+
+  --text-primary: #f2f7fa;
+  --text-secondary: #8493a0;
+}
+
+/* ==========================================================================
+   BLOOD THEME: Crimson Eclipse
+   ========================================================================== */
+.theme-blood {
+  --bg-primary: #0d0606; /* Dark nebula black */
+  --bg-secondary: #1a0f0f; /* Smoked blood burgundy */
+  --bg-tertiary: #281717;
+
+  --accent: #e24a4a; /* Cosmic red / Blood scarlet */
+  --accent-glow: rgba(226, 74, 74, 0.15);
+
+  --text-primary: #faf2f2;
+  --text-secondary: #a28585;
+}
+
+/* ==========================================================================
+   TAILWIND SYSTEM CONFIGURATION MAPS (Tailwind v4 Setup)
+   ========================================================================== */
 @theme {
-  /* Colors map directly to bg-*, text-*, border-* */
   --color-background: var(--bg-primary);
   --color-surface: var(--bg-secondary);
   --color-border: var(--bg-tertiary);
@@ -53,7 +92,6 @@
   --color-maintext: var(--text-primary);
   --color-subtext: var(--text-secondary);
 
-  /* Tailwind v4 expects --font-*, not --font-family-* */
   --font-header: var(--font-header);
   --font-body: var(--font-body);
 }
